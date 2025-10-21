@@ -5,6 +5,26 @@
   const cw3 = document.getElementById('cw3');
   const answer = document.getElementById('answer');
 
+  function showLoading() {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading-popup';
+    loadingDiv.style.position = 'fixed';
+    loadingDiv.style.top = '0';
+    loadingDiv.style.left = '0';
+    loadingDiv.style.width = '100vw';
+    loadingDiv.style.height = '100vh';
+    loadingDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    loadingDiv.style.color = 'white';
+    loadingDiv.style.display = 'flex';
+    loadingDiv.style.justifyContent = 'center';
+    loadingDiv.style.alignItems = 'center';
+    loadingDiv.style.fontSize = '2em';
+    loadingDiv.style.zIndex = '1000';
+    loadingDiv.textContent = 'Loading…';
+    document.body.appendChild(loadingDiv);
+    return loadingDiv;
+  }
+
   example.addEventListener("click", function() {
     fetch('https://jsonplaceholder.typicode.com/posts')
       .then(response => response.json())
@@ -15,9 +35,9 @@
   });
 
   cw1.addEventListener("click", async function() {
-    try {
-      answer.textContent = "Loading…";
+    const loadingPopup = showLoading();
 
+    try {
       const response = await fetch('https://jsonplaceholder.typicode.com/posts');
       const posts = await response.json();
 
@@ -43,13 +63,15 @@
     } catch (error) {
       answer.textContent = 'Wystąpił błąd podczas pobierania danych.';
       console.error(error);
+    } finally {
+      loadingPopup.remove();
     }
   });
 
   cw2.addEventListener("click", async function() {
-    try {
-      answer.textContent = "Loading…";
+    const loadingPopup = showLoading();
 
+    try {
       const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
       const post = await response.json();
 
@@ -69,13 +91,15 @@
     } catch (error) {
       answer.textContent = 'Wystąpił błąd podczas pobierania posta.';
       console.error(error);
+    } finally {
+      loadingPopup.remove();
     }
   });
 
   cw3.addEventListener("click", async function() {
-    try {
-      answer.textContent = "Processing…";
+    const loadingPopup = showLoading();
 
+    try {
       const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
         method: "POST",
         headers: {
@@ -97,6 +121,8 @@
     } catch (error) {
       answer.textContent = "Wystąpił błąd podczas dodawania posta.";
       console.error(error);
+    } finally {
+      loadingPopup.remove();
     }
   });
 })();
